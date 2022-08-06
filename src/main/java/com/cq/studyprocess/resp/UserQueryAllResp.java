@@ -1,13 +1,13 @@
-package com.cq.studyprocess.domain;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
+package com.cq.studyprocess.resp;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,10 +19,10 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="User对象", description="用户表")
-public class User implements Serializable {
+@ApiModel(value="UserQueryAllResp对象", description="用户表")
+public class UserQueryAllResp implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 32421L;
 
     @ApiModelProperty(value = "用户id")
     @TableId
@@ -33,9 +33,6 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "邮箱")
     private String email;
-
-    @ApiModelProperty(value = "用户密码")
-    private String password;
 
     @ApiModelProperty(value = "头像：如果用户传入头像，那么就用户的，如果没传，那么就用一个默认的")
     private String avatar;
@@ -54,9 +51,6 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "修改时间")
     private LocalDateTime updateTime;
-
-    @ApiModelProperty(value = "逻辑删除字段：0未删除，1已删除")
-    private Integer isDelete;
 
 
 }
