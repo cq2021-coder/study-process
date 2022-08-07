@@ -8,15 +8,22 @@ package com.cq.studyprocess.exception;
  */
 public class BusinessException extends RuntimeException {
 
+    private final BusinessCode businessCode;
+
     private final String message;
 
-    public BusinessException(String message) {
+    public BusinessException(BusinessCode businessCode, String message) {
+        this.businessCode = businessCode;
         this.message = message;
     }
 
     @Override
     public String getMessage() {
         return message;
+    }
+
+    public BusinessCode getBusinessCode() {
+        return businessCode;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cq.studyprocess.constants.UserConstant;
 import com.cq.studyprocess.domain.User;
+import com.cq.studyprocess.exception.BusinessCode;
 import com.cq.studyprocess.exception.BusinessException;
 import com.cq.studyprocess.mapper.UserMapper;
 import com.cq.studyprocess.req.PageReq;
@@ -45,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         int count = this.count(Wrappers.lambdaQuery(User.class).eq(User::getEmail, req.getEmail()));
         if (count != 0) {
-            throw new BusinessException("该邮箱已注册");
+            throw new BusinessException(BusinessCode.PARAMS_ERROR, "该邮箱已被注册！");
         }
 
         User user = CopyUtil.copy(req, User.class);
@@ -59,12 +60,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //1、根据email去查询一个用户，如果没有的话，那么说明此用户不存在
         User userDb = this.getOne(Wrappers.lambdaQuery(User.class).eq(User::getEmail, req.getEmail()));
         if (ObjectUtils.isEmpty(userDb)) {
-            throw new BusinessException("账号或密码错误！");
+            throw new BusinessException(BusinessCode.LOGIN_ERROR,BusinessCode.LOGIN_ERROR.getMessage());
         }
         String reqPassword = DigestUtils.md5DigestAsHex((req.getPassword() + SALT).getBytes());
         //2、对比传入的密码是否正确
         if (!reqPassword.equals(userDb.getPassword())) {
-            throw new BusinessException("账号或密码错误！");
+            throw new BusinessException(BusinessCode.LOGIN_ERROR,BusinessCode.LOGIN_ERROR.getMessage());
         }
 
         User sessionUser = new User();
