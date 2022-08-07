@@ -1,5 +1,6 @@
 package com.cq.studyprocess.common;
 
+import com.cq.studyprocess.exception.BusinessCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,8 +52,8 @@ public class CommonResponse<T> implements Serializable {
         return new CommonResponse<>(true, null, "");
     }
 
-    public static <T> CommonResponse<T> error(String message) {
-        return new CommonResponse<>(false, null, message);
+    public static CommonResponse<Object> error(BusinessCode code, String message) {
+        return new CommonResponse<>(false, code.getMessage(), message);
     }
 
 

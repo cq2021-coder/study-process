@@ -23,12 +23,12 @@ public class ControllerExceptionHandler {
     public CommonResponse<Object> validExceptionHandler(BindException e) {
         String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.warn("parameter validation failed:{}", errorMessage);
-        return CommonResponse.error(errorMessage);
+        return CommonResponse.error(BusinessCode.PARAMS_ERROR,errorMessage);
     }
 
     @ExceptionHandler(value = BusinessException.class)
     public CommonResponse<Object> businessExceptionHandler(BusinessException e) {
         log.warn("parameter validation failed:{}", e.getMessage());
-        return CommonResponse.error(e.getMessage());
+        return CommonResponse.error(e.getBusinessCode(), e.getMessage());
     }
 }

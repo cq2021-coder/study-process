@@ -2,6 +2,7 @@ package com.cq.studyprocess.interceptor;
 
 import com.cq.studyprocess.annotations.AdminRole;
 import com.cq.studyprocess.domain.User;
+import com.cq.studyprocess.exception.BusinessCode;
 import com.cq.studyprocess.exception.BusinessException;
 import com.cq.studyprocess.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -39,19 +40,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute(SESSION_KEYWORDS);
         if (ObjectUtils.isEmpty(userSession)) {
-            throw new BusinessException("用户信息错误");
+            throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "session中没有此类用户！");
         }
         log.info("user from session is:{}", userSession);
         User userById = userMapper.selectById(userSession.getUserId());
         if (ObjectUtils.isEmpty(userById)) {
-            throw new BusinessException("用户信息错误");
+            throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "数据库中没有此类用户！");
         }
 
         //当handlerMethod.hasMethodAnnotation(AdminRole.class)为true时执行鉴权操作
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         if (handlerMethod.hasMethodAnnotation(AdminRole.class)) {
             if (!userById.getRoles().equals(ADMIN_ROLE)) {
-                throw new BusinessException("用户无权限！");
+                throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "用户无权限！");
             }
         }
         return true;
