@@ -48,4 +48,11 @@ public interface UserService extends IService<User> {
      */
     PageResp<UserQueryAllResp> queryAll(UserQueryAllReq req, HttpSession session);
 
+    /**
+     * 注销
+     *
+     * @param session 会话
+     */
+    void logout(HttpSession session);
+
 }
