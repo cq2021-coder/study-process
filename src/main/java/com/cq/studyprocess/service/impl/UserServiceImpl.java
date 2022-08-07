@@ -8,12 +8,11 @@ import com.cq.studyprocess.domain.User;
 import com.cq.studyprocess.exception.BusinessCode;
 import com.cq.studyprocess.exception.BusinessException;
 import com.cq.studyprocess.mapper.UserMapper;
-import com.cq.studyprocess.req.PageReq;
 import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
 import com.cq.studyprocess.resp.PageResp;
-import com.cq.studyprocess.resp.UserQueryAllResp;
+import com.cq.studyprocess.resp.UserQueryResp;
 import com.cq.studyprocess.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.studyprocess.utils.CopyUtil;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import java.util.List;
@@ -41,22 +41,26 @@ import static com.cq.studyprocess.constants.UserConstant.SESSION_KEYWORDS;
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Resource
+    private UserMapper userMapper;
+
     @Override
     public void register(UserRegisterReq req) {
 
-        int count = this.count(Wrappers.lambdaQuery(User.class).eq(User::getEmail, req.getEmail()));
-        if (count != 0) {
-            throw new BusinessException(BusinessCode.PARAMS_ERROR, "该邮箱已被注册！");
-        }
-
+        int count = userMapper.countByEmail(req.getEmail());
         User user = CopyUtil.copy(req, User.class);
         user.setAvatar(UserConstant.DEFAULT_AVATAR);
         user.setPassword(DigestUtils.md5DigestAsHex((user.getPassword() + SALT).getBytes()));
-        this.save(user);
+
+        if (count!=0) {
+            userMapper.updateUser(user);
+        }else {
+            this.save(user);
+        }
     }
 
     @Override
-    public User login(UserLoginReq req, HttpSession session) {
+    public UserQueryResp login(UserLoginReq req, HttpSession session) {
         //1、根据email去查询一个用户，如果没有的话，那么说明此用户不存在
         User userDb = this.getOne(Wrappers.lambdaQuery(User.class).eq(User::getEmail, req.getEmail()));
         if (ObjectUtils.isEmpty(userDb)) {
@@ -72,11 +76,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         sessionUser.setUserId(userDb.getUserId());
         session.setAttribute(SESSION_KEYWORDS, sessionUser);
 
-        return userDb;
+        return CopyUtil.copy(userDb, UserQueryResp.class);
     }
 
     @Override
-    public PageResp<UserQueryAllResp> queryAll(UserQueryAllReq req, HttpSession session) {
+    public PageResp<UserQueryResp> queryAll(UserQueryAllReq req, HttpSession session) {
 
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery(User.class)
                 .like(!ObjectUtils.isEmpty(req.getUsername()), User::getUsername, req.getUsername())
@@ -87,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         log.info("the result page is :{}", page);
         return new PageResp<>(
                 CopyUtil.copyList(
-                        page.getRecords(), UserQueryAllResp.class),
+                        page.getRecords(), UserQueryResp.class),
                 page.getSize()
         );
 
@@ -98,5 +102,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         session.removeAttribute(SESSION_KEYWORDS);
     }
 
+    @Override
+    public UserQueryResp queryById(Long id) {
+        return CopyUtil.copy(this.getById(id), UserQueryResp.class);
+    }
+
+    @Override
+    public void deleteByIds(List<Long> ids) {
+        this.removeByIds(ids);
+    }
 
 }

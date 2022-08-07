@@ -18,11 +18,11 @@ public class PageReq implements Serializable {
     /**
      * 第几页
      */
-    private int page;
+    private int page = 1;
 
     /**
      * 一页有多少数据
      */
-    private int size;
+    private int size = 10;
 
 }

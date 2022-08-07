@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cq.studyprocess.mapper.UserMapper">
-
+    <update id="updateUser">
+        update user
+        SET username=#{user.username},
+            password=#{user.password},
+            avatar=#{user.avatar},
+            is_delete=0
+        WHERE email = #{user.email};
+    </update>
+    <select id="countByEmail" resultType="java.lang.Integer">
+        select count(*)
+        from study_process.user
+        where user.email = #{email};
+    </select>
 </mapper>
