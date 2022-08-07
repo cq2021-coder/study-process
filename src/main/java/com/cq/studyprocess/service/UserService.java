@@ -2,12 +2,11 @@ package com.cq.studyprocess.service;
 
 import com.cq.studyprocess.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cq.studyprocess.req.PageReq;
 import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
 import com.cq.studyprocess.resp.PageResp;
-import com.cq.studyprocess.resp.UserQueryAllResp;
+import com.cq.studyprocess.resp.UserQueryResp;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -34,9 +33,9 @@ public interface UserService extends IService<User> {
      *
      * @param req     请求
      * @param session 会话
-     * @return {@link User}
+     * @return {@link UserQueryResp}
      */
-    User login(UserLoginReq req, HttpSession session);
+    UserQueryResp login(UserLoginReq req, HttpSession session);
 
     /**
      * 查询所有
@@ -46,7 +45,7 @@ public interface UserService extends IService<User> {
      * @param req     要求事情
      * @return {@link List}<{@link User}>
      */
-    PageResp<UserQueryAllResp> queryAll(UserQueryAllReq req, HttpSession session);
+    PageResp<UserQueryResp> queryAll(UserQueryAllReq req, HttpSession session);
 
     /**
      * 注销
@@ -54,5 +53,20 @@ public interface UserService extends IService<User> {
      * @param session 会话
      */
     void logout(HttpSession session);
+
+    /**
+     * 查询通过id
+     *
+     * @param id id
+     * @return {@link UserQueryResp}
+     */
+    UserQueryResp queryById(Long id);
+
+    /**
+     * 删除通过id
+     *
+     * @param ids id
+     */
+    void deleteByIds(List<Long> ids);
 
 }
