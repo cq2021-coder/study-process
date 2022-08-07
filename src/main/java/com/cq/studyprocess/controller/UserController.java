@@ -8,11 +8,10 @@ import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
 import com.cq.studyprocess.resp.PageResp;
-import com.cq.studyprocess.resp.UserQueryAllResp;
+import com.cq.studyprocess.resp.UserQueryResp;
 import com.cq.studyprocess.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -45,11 +44,12 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    public CommonResponse<User> login(@RequestBody @Valid UserLoginReq req, HttpSession session) {
+    public CommonResponse<UserQueryResp> login(@RequestBody @Valid UserLoginReq req, HttpSession session) {
         return CommonResponse.success(userService.login(req, session), "登录成功！");
     }
 
     @PostMapping("/logout")
+    @ApiOperation("退出登录")
     public CommonResponse<String> logout(HttpSession session) {
         userService.logout(session);
         return CommonResponse.success("退出成功！");
@@ -58,8 +58,22 @@ public class UserController {
     @GetMapping("/query-all")
     @ApiOperation("查询所有用户")
     @AdminRole
-    public CommonResponse<PageResp<UserQueryAllResp>> queryAll(UserQueryAllReq req, HttpSession session) {
+    public CommonResponse<PageResp<UserQueryResp>> queryAll(UserQueryAllReq req, HttpSession session) {
         return CommonResponse.success(userService.queryAll(req, session), "查询成功！");
+    }
+
+    @GetMapping("/query-id/{userId}")
+    @ApiOperation("根据id查询用户")
+    @AdminRole
+    public CommonResponse<UserQueryResp> queryById(@PathVariable Long userId) {
+        return CommonResponse.success(userService.queryById(userId), "根据id查询成功！");
+    }
+
+    @DeleteMapping("/delete/{ids}")
+    @ApiOperation("根据id批量删除用户")
+    public CommonResponse<String> deleteByIds(@PathVariable List<Long> ids) {
+        userService.deleteByIds(ids);
+        return CommonResponse.success("删除成功！");
     }
 
 
