@@ -90,7 +90,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery(User.class)
                 .like(!ObjectUtils.isEmpty(req.getUsername()), User::getUsername, req.getUsername())
                 .eq(!ObjectUtils.isEmpty(req.getEmail()), User::getEmail, req.getEmail())
-                .eq(!ObjectUtils.isEmpty(req.getRoles()), User::getRoles, req.getRoles());
+                .eq(!ObjectUtils.isEmpty(req.getRoles()), User::getRoles, req.getRoles())
+                .orderByDesc(User::getUpdateTime);
 
         Page<User> page = this.page(new Page<>(req.getPage(), req.getSize()), queryWrapper);
         log.info("the result page is :{}", page);

@@ -99,9 +99,9 @@ public class CodeGenerator {
         TemplateConfig templateConfig = new TemplateConfig();
         //取消默认mapper的生成地址
         templateConfig.setXml(null);
-        templateConfig.setController(null);
-        templateConfig.setService(null);
-        templateConfig.setServiceImpl(null);
+//        templateConfig.setController(null);
+//        templateConfig.setService(null);
+//        templateConfig.setServiceImpl(null);
         mpg.setTemplate(templateConfig);
 
 
@@ -120,7 +120,6 @@ public class CodeGenerator {
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
-
     }
 
 }
