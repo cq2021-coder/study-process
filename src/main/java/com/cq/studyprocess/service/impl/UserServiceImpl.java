@@ -11,8 +11,10 @@ import com.cq.studyprocess.mapper.UserMapper;
 import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
+import com.cq.studyprocess.req.UserUpdateReq;
 import com.cq.studyprocess.resp.PageResp;
 import com.cq.studyprocess.resp.UserQueryResp;
+import com.cq.studyprocess.service.CommonService;
 import com.cq.studyprocess.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.studyprocess.utils.CopyUtil;
@@ -43,6 +45,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private CommonService commonService;
 
     @Override
     public void register(UserRegisterReq req) {
@@ -109,7 +114,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void deleteByIds(List<Long> ids) {
+        List<User> userList = this.listByIds(ids);
+        userList.forEach(user -> commonService.deleteFile(user.getAvatar()));
         this.removeByIds(ids);
+    }
+
+    @Override
+    public void updateUser(UserUpdateReq req) {
+        User currentUser = this.getById(req.getUserId());
+        if (!ObjectUtils.isEmpty(req.getEmail())) {
+
+            //不一致代表用户希望修改邮箱
+            if(!currentUser.getEmail().equals(req.getEmail())) {
+                int count = this.count(Wrappers.lambdaQuery(User.class).eq(User::getEmail, req.getEmail()));
+                //不为0就是此邮箱存在
+                if (count != 0) {
+                    throw new BusinessException(BusinessCode.PARAMS_ERROR, "邮箱已被注册，不能修改！");
+                }
+            }
+        }
+        if (!ObjectUtils.isEmpty(req.getAvatar()) && !currentUser.getAvatar().equals(req.getAvatar())) {
+            commonService.deleteFile(currentUser.getAvatar());
+        }
+        if (!ObjectUtils.isEmpty(req.getPassword())) {
+            req.setPassword(DigestUtils.md5DigestAsHex((req.getPassword()+SALT).getBytes()));
+        }
+        this.updateById(CopyUtil.copy(req, User.class));
     }
 
 }

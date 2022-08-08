@@ -7,6 +7,7 @@ import com.cq.studyprocess.domain.User;
 import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
+import com.cq.studyprocess.req.UserUpdateReq;
 import com.cq.studyprocess.resp.PageResp;
 import com.cq.studyprocess.resp.UserQueryResp;
 import com.cq.studyprocess.service.UserService;
@@ -74,6 +75,13 @@ public class UserController {
     public CommonResponse<String> deleteByIds(@PathVariable List<Long> ids) {
         userService.deleteByIds(ids);
         return CommonResponse.success("删除成功！");
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("根据id更新用户信息")
+    public CommonResponse<String> updateById(@RequestBody @Valid UserUpdateReq req) {
+        userService.updateUser(req);
+        return CommonResponse.success("更新成功！");
     }
 
 

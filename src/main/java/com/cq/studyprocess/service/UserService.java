@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cq.studyprocess.req.UserLoginReq;
 import com.cq.studyprocess.req.UserQueryAllReq;
 import com.cq.studyprocess.req.UserRegisterReq;
+import com.cq.studyprocess.req.UserUpdateReq;
 import com.cq.studyprocess.resp.PageResp;
 import com.cq.studyprocess.resp.UserQueryResp;
 
@@ -68,5 +69,12 @@ public interface UserService extends IService<User> {
      * @param ids id
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 更新用户
+     *
+     * @param req 要求事情
+     */
+    void updateUser(UserUpdateReq req);
 
 }
