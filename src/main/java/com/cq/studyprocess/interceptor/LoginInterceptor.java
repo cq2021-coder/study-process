@@ -43,14 +43,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "session中没有此类用户！");
         }
         log.info("user from session is:{}", userSession);
-        User userById = userMapper.selectById(userSession.getUserId());
-        if (ObjectUtils.isEmpty(userById)) {
-            throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "数据库中没有此类用户！");
-        }
 
         //当handlerMethod.hasMethodAnnotation(AdminRole.class)为true时执行鉴权操作
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         if (handlerMethod.hasMethodAnnotation(AdminRole.class)) {
+            User userById = userMapper.selectById(userSession.getUserId());
+            if (ObjectUtils.isEmpty(userById)) {
+                throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "数据库中没有此类用户！");
+            }
             if (!userById.getRoles().equals(ADMIN_ROLE)) {
                 throw new BusinessException(BusinessCode.USER_MESSAGE_ERROR, "用户无权限！");
             }
