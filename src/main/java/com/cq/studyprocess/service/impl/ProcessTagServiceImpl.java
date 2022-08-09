@@ -1,9 +1,9 @@
 package com.cq.studyprocess.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cq.studyprocess.domain.ProcessTag;
 import com.cq.studyprocess.mapper.ProcessTagMapper;
 import com.cq.studyprocess.service.ProcessTagService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author 程崎
- * @since 2022-08-08
+ * @since 2022-08-09
  */
 @Service
 public class ProcessTagServiceImpl extends ServiceImpl<ProcessTagMapper, ProcessTag> implements ProcessTagService {

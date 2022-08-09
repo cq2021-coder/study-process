@@ -31,4 +31,10 @@ public class ControllerExceptionHandler {
         log.warn("parameter validation failed:{}", e.getMessage());
         return CommonResponse.error(e.getBusinessCode(), e.getMessage());
     }
+//todo 文件过大异常未处理
+//    @ExceptionHandler(MaxUploadSizeExceededException.class)
+//    public CommonResponse<Object> fileUploadExceptionHandler(MaxUploadSizeExceededException e) {
+//        log.warn("upload file is too big\n{}", e.getMessage());
+//        return CommonResponse.error(BusinessCode.FILE_ERROR, "文件大小不能超过10M");
+//    }
 }

@@ -27,7 +27,7 @@ create table user_process
   default charset = utf8mb4 comment '学习进度表';
 create table tags
 (
-    tag_id      bigint primary key comment '用户id',
+    tag_id      bigint primary key comment '标签id',
     tag_name    varchar(100) default '[]' comment '标签内容',
     create_time datetime     default CURRENT_TIMESTAMP comment '创建时间',
     update_time datetime     default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '修改时间',
@@ -37,7 +37,7 @@ create table tags
 create table process_tag
 (
     record_id   bigint primary key comment '进度和标签的中间表id',
-    user_id     bigint not null comment '用户id',
+    process_id     bigint not null comment '进度表id',
     tag_id      bigint not null comment '标签id',
     tag_name    varchar(100) default '[]' comment '标签内容',
     create_time datetime     default CURRENT_TIMESTAMP comment '创建时间',

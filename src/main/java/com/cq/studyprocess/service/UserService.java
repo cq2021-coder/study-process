@@ -2,10 +2,10 @@ package com.cq.studyprocess.service;
 
 import com.cq.studyprocess.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cq.studyprocess.req.UserLoginReq;
-import com.cq.studyprocess.req.UserQueryAllReq;
-import com.cq.studyprocess.req.UserRegisterReq;
-import com.cq.studyprocess.req.UserUpdateReq;
+import com.cq.studyprocess.req.user.UserLoginReq;
+import com.cq.studyprocess.req.user.UserQueryAllReq;
+import com.cq.studyprocess.req.user.UserRegisterReq;
+import com.cq.studyprocess.req.user.UserUpdateReq;
 import com.cq.studyprocess.resp.PageResp;
 import com.cq.studyprocess.resp.UserQueryResp;
 
