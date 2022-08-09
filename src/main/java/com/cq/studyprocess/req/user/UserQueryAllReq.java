@@ -1,6 +1,7 @@
-package com.cq.studyprocess.req;
+package com.cq.studyprocess.req.user;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.cq.studyprocess.req.PageReq;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

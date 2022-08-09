@@ -1,4 +1,4 @@
-package com.cq.studyprocess.req;
+package com.cq.studyprocess.req.user;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

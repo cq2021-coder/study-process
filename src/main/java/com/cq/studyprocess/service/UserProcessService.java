@@ -1,7 +1,10 @@
 package com.cq.studyprocess.service;
 
-import com.cq.studyprocess.domain.UserProcess;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cq.studyprocess.domain.UserProcess;
+import com.cq.studyprocess.req.userProcess.UserProcessSaveReq;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -12,5 +15,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-08-08
  */
 public interface UserProcessService extends IService<UserProcess> {
+
+    /**
+     * 保存学习进度
+     *
+     * @param req 要求事情
+     */
+    void saveUserProcess(UserProcessSaveReq req, HttpSession session);
+
 
 }

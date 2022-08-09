@@ -1,4 +1,4 @@
-package com.cq.studyprocess.domain;
+package com.cq.studyprocess.resp;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
@@ -11,27 +11,21 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 进度和标签的中间表id
+ * 标签表
  * </p>
  *
  * @author 程崎
- * @since 2022-08-09
+ * @since 2022-08-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="ProcessTag对象", description="进度和标签的中间表id")
-public class ProcessTag implements Serializable {
+@ApiModel(value="Tags对象", description="标签表")
+public class TagsQueryResp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "进度和标签的中间表id")
-    @TableId
-    private Long recordId;
-
-    @ApiModelProperty(value = "进度表id")
-    private Long processId;
-
     @ApiModelProperty(value = "标签id")
+    @TableId
     private Long tagId;
 
     @ApiModelProperty(value = "标签内容")
@@ -42,9 +36,6 @@ public class ProcessTag implements Serializable {
 
     @ApiModelProperty(value = "修改时间")
     private LocalDateTime updateTime;
-
-    @ApiModelProperty(value = "逻辑删除字段：0未删除，1已删除")
-    private Integer isDelete;
 
 
 }
