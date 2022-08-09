@@ -1,9 +1,9 @@
 package com.cq.studyprocess.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 公共服务
@@ -26,13 +26,15 @@ public interface CommonService {
      *
      * @param name     名字
      * @param response 响应
+     * @throws IOException ioexception
      */
-    void download(String name, HttpServletResponse response);
+    void download(String name, HttpServletResponse response) throws IOException;
 
     /**
      * 删除文件
      *
      * @param name 名字
+     * @return boolean
      */
     boolean deleteFile(String name);
 

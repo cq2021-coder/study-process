@@ -56,10 +56,11 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public void download(String name, HttpServletResponse response) {
+    public void download(String name, HttpServletResponse response) throws IOException {
         response.setContentType("/image/jpeg");
+        ServletOutputStream outputStream = null;
         try (FileInputStream inputStream = new FileInputStream(basePath + name)) {
-            ServletOutputStream outputStream = response.getOutputStream();
+             outputStream = response.getOutputStream();
             int len;
             byte[] bytes = new byte[1024];
             while ((len = inputStream.read(bytes)) != -1) {
@@ -68,6 +69,9 @@ public class CommonServiceImpl implements CommonService {
             }
         } catch (IOException e) {
             throw new BusinessException(BusinessCode.FILE_ERROR, "文件读取时错误！");
+        }finally {
+            assert outputStream != null;
+            outputStream.close();
         }
     }
 

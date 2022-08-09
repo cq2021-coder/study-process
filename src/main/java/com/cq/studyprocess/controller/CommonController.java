@@ -1,6 +1,8 @@
 package com.cq.studyprocess.controller;
 
 import com.cq.studyprocess.common.CommonResponse;
+import com.cq.studyprocess.exception.BusinessCode;
+import com.cq.studyprocess.exception.BusinessException;
 import com.cq.studyprocess.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 公共控制器
@@ -32,7 +35,12 @@ public class CommonController {
     @ApiOperation("下载文件接口")
     @GetMapping("/download")
     public void download(String name, HttpServletResponse response) {
-        commonService.download(name, response);
+
+        try {
+            commonService.download(name, response);
+        } catch (IOException e) {
+            throw new BusinessException(BusinessCode.FILE_ERROR,"获取文件错误！");
+        }
     }
 
     @DeleteMapping("/delete")
