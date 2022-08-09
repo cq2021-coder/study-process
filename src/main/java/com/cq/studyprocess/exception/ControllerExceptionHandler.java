@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 /**
  * 控制器异常处理程序
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author 程崎
  * @since 2022/08/05
  */
-@RestControllerAdvice(annotations = {RestController.class})
+@RestControllerAdvice
 @ResponseBody
 @Slf4j
 public class ControllerExceptionHandler {
@@ -31,10 +31,9 @@ public class ControllerExceptionHandler {
         log.warn("parameter validation failed:{}", e.getMessage());
         return CommonResponse.error(e.getBusinessCode(), e.getMessage());
     }
-//todo 文件过大异常未处理
-//    @ExceptionHandler(MaxUploadSizeExceededException.class)
-//    public CommonResponse<Object> fileUploadExceptionHandler(MaxUploadSizeExceededException e) {
-//        log.warn("upload file is too big\n{}", e.getMessage());
-//        return CommonResponse.error(BusinessCode.FILE_ERROR, "文件大小不能超过10M");
-//    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public CommonResponse<Object> fileUploadExceptionHandler(MaxUploadSizeExceededException e) {
+        log.warn("upload file is too big\n{}",e.getMessage());
+        return CommonResponse.error(BusinessCode.FILE_ERROR, "文件大小不能超过10M");
+    }
 }
