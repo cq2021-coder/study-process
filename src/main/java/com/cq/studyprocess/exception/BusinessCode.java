@@ -14,6 +14,7 @@ public enum BusinessCode {
     USER_MESSAGE_ERROR("用户信息错误"),
     LOGIN_ERROR("账号或密码错误！"),
     FILE_ERROR("文件异常！"),
+    AUTH_ERROR("权限错误！"),
     ;
     private final String message;
 
