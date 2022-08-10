@@ -44,6 +44,8 @@ public class TagsServiceImpl extends ServiceImpl<TagsMapper, Tags> implements Ta
                                 !ObjectUtils.isEmpty(req.getTagName()),
                                 Tags::getTagName, req.getTagName()
                         )
+                        .orderByAsc(Tags::getTagName)
+                        .orderByDesc(Tags::getUpdateTime)
         );
         PageResp<TagsQueryResp> pageResp = new PageResp<>();
         pageResp.setContent(CopyUtil.copyList(tagsPage.getRecords(), TagsQueryResp.class));

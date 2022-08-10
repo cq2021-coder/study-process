@@ -20,12 +20,12 @@ public class PageReq implements Serializable {
      * 第几页
      */
     @ApiModelProperty(value = "当前页")
-    private int page = 1;
+    private int page;
 
     /**
      * 一页有多少数据
      */
     @ApiModelProperty(value = "分页大小")
-    private int size = 10;
+    private int size;
 
 }
