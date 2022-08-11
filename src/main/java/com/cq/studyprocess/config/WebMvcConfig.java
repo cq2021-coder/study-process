@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -66,5 +68,31 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         messageConverter.setObjectMapper(new JacksonObjectMapper());
         converters.add(0, messageConverter);
 
+    }
+
+    /**
+     * 配置跨域
+     *
+     * @param registry 注册表
+     */
+    @Override
+    protected void addCorsMappings(@NotNull CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns(
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "http://localhost:8080",
+                        "http://127.0.0.1:8080",
+                        "http://120.48.83.118",
+                        "http://81.69.247.89",
+                        "http://cqlovehwh.com",
+                        "http://www.cqlovehwh.com",
+                        "https://www.cqlovehwh.com"
+                )
+                .allowedHeaders(CorsConfiguration.ALL)
+                .allowedMethods(CorsConfiguration.ALL)
+                .allowCredentials(true)
+                // No need to send pre-check again within 1 hour
+                .maxAge(3600);
     }
 }
