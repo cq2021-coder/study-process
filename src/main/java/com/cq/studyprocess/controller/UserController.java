@@ -12,6 +12,9 @@ import com.cq.studyprocess.resp.UserQueryResp;
 import com.cq.studyprocess.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户接口")
+@CacheConfig(cacheNames = "users")
 public class UserController {
 
     @Resource
@@ -37,6 +41,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation("用户注册")
+    @CacheEvict(allEntries = true)
     public CommonResponse<String> register(@RequestBody @Valid UserRegisterReq registerReq) {
         userService.register(registerReq);
         return CommonResponse.success("用户注册成功！");
@@ -44,6 +49,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
+    @Cacheable(key = "#req.email+'_'+#req.password+'_login'")
     public CommonResponse<UserQueryResp> login(@RequestBody @Valid UserLoginReq req, HttpSession session) {
         return CommonResponse.success(userService.login(req, session), "登录成功！");
     }
@@ -58,6 +64,7 @@ public class UserController {
     @GetMapping("/query-all")
     @ApiOperation("查询所有用户")
     @AdminRole
+    @Cacheable(key = "#req.page+'_'+#req.size+'_query_page'")
     public CommonResponse<PageResp<UserQueryResp>> queryAll(UserQueryAllReq req, HttpSession session) {
         return CommonResponse.success(userService.queryAll(req, session), "查询成功！");
     }
@@ -65,12 +72,14 @@ public class UserController {
     @GetMapping("/query-id/{userId}")
     @ApiOperation("根据id查询用户")
     @AdminRole
+    @Cacheable(key = "#userId+'_query_by_id'")
     public CommonResponse<UserQueryResp> queryById(@PathVariable Long userId) {
         return CommonResponse.success(userService.queryById(userId), "根据id查询成功！");
     }
 
     @DeleteMapping("/delete/{ids}")
     @ApiOperation("根据id批量删除用户")
+    @CacheEvict(allEntries = true)
     public CommonResponse<String> deleteByIds(@PathVariable List<Long> ids) {
         userService.deleteByIds(ids);
         return CommonResponse.success("删除成功！");
@@ -78,6 +87,7 @@ public class UserController {
 
     @PostMapping("/update")
     @ApiOperation("根据id更新用户信息")
+    @CacheEvict(allEntries = true)
     public CommonResponse<String> updateById(@RequestBody @Valid UserUpdateReq req) {
         userService.updateUser(req);
         return CommonResponse.success("更新成功！");
