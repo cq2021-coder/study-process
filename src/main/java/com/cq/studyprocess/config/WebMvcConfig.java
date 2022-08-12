@@ -4,6 +4,7 @@ import com.cq.studyprocess.common.JacksonObjectMapper;
 import com.cq.studyprocess.interceptor.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.cq.studyprocess.constants.EnvironmentConstant.PROD;
 
 /**
  * web mvc配置
@@ -29,19 +32,30 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Resource
     private LoginInterceptor loginInterceptor;
 
+    @Value("${spring.profiles.active}")
+    private String active;
+
     @Override
     protected void addInterceptors(@NotNull InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/doc.html",
-                        "/webjars/**",
-                        "/swagger-resources/**",
-                        "/v3/**",
-                        "/user/login",
-                        "/user/register"
-                );
-
+        if (active.equals(PROD)){
+            registry.addInterceptor(loginInterceptor)
+                    .addPathPatterns("/**")
+                    .excludePathPatterns(
+                            "/user/login",
+                            "/user/register"
+                    );
+        }else {
+            registry.addInterceptor(loginInterceptor)
+                    .addPathPatterns("/**")
+                    .excludePathPatterns(
+                            "/doc.html",
+                            "/webjars/**",
+                            "/swagger-resources/**",
+                            "/v3/**",
+                            "/user/login",
+                            "/user/register"
+                    );
+        }
     }
 
     /**

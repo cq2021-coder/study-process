@@ -3,7 +3,6 @@ package com.cq.studyprocess.controller;
 
 import com.cq.studyprocess.annotations.AdminRole;
 import com.cq.studyprocess.common.CommonResponse;
-import com.cq.studyprocess.domain.User;
 import com.cq.studyprocess.req.user.UserLoginReq;
 import com.cq.studyprocess.req.user.UserQueryAllReq;
 import com.cq.studyprocess.req.user.UserRegisterReq;
@@ -38,7 +37,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation("用户注册")
-    public CommonResponse<User> register(@RequestBody @Valid UserRegisterReq registerReq) {
+    public CommonResponse<String> register(@RequestBody @Valid UserRegisterReq registerReq) {
         userService.register(registerReq);
         return CommonResponse.success("用户注册成功！");
     }

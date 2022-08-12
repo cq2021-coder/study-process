@@ -98,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return new PageResp<>(
                 CopyUtil.copyList(
                         page.getRecords(), UserQueryResp.class),
-                page.getSize()
+                page.getTotal()
         );
 
     }
