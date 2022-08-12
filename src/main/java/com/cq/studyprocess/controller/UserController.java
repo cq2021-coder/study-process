@@ -49,7 +49,6 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    @Cacheable(key = "#req.email+'_'+#req.password+'_login'")
     public CommonResponse<UserQueryResp> login(@RequestBody @Valid UserLoginReq req, HttpSession session) {
         return CommonResponse.success(userService.login(req, session), "登录成功！");
     }
