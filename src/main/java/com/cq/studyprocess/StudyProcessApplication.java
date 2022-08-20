@@ -24,7 +24,7 @@ public class StudyProcessApplication {
         ConfigurableEnvironment environment = springApplication.run(args).getEnvironment();
         log.info("success start！");
         String port = environment.getProperty("server.port");
-        log.info("knife4j的网址为\thttp://localhost:{}/doc.html", port);
+        log.info("knife4j的网址为\thttp://localhost:{}/api/doc.html", port);
 
     }
 
